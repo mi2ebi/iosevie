@@ -8,6 +8,7 @@ node_modules
 # Build artifacts
 .build
 # dist
+dist/*/TTF-Unhinted
 release-archives
 
 # Test artifacts
