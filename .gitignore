@@ -7,7 +7,7 @@ node_modules
 
 # Build artifacts
 .build
-dist
+# dist
 release-archives
 
 # Test artifacts
@@ -21,7 +21,7 @@ packages/font-otl/src/**/*.mjs
 
 # Private config files
 private.toml
-private-build-plans.toml
+# private-build-plans.toml
 params/private-parameters.toml
 
 # pages-source ignores
@@ -31,3 +31,5 @@ shared/fonts/imports/*/TTF/*
 
 # Platform specified files
 .DS_store
+
+.github

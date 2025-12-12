@@ -1,5 +1,8 @@
 # Use LF line endings; do not normlize to CRLF
 * text eol=lf
 
+*.ttf -text
+*.otf -text
+
 # Recognize PatEL files for GitHub language stats
 *.ptl linguist-language=PatEL
