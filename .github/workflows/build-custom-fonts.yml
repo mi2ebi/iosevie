@@ -1,6 +1,10 @@
 name: Build Custom Iosevka Fonts
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - private-build-plans.toml
+  workflow_dispatch:
 
 jobs:
   setup-matrix:
@@ -13,10 +17,9 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
-      - name: Checkout this repository to access custom build plans
+      - name: Checkout this repository
         uses: actions/checkout@v5
-
-      - name: Get the list of font families in private-build-plans.toml
+      - name: Get font families
         id: get-families
         shell: bash
         working-directory: get-all-families-in-private-build-plan
@@ -27,56 +30,69 @@ jobs:
   build:
     name: Build ${{ matrix.fontFamily }} font
     runs-on: ubuntu-latest
-    
     needs: [setup-matrix]
-
     strategy:
       matrix:
         fontFamily: ${{ fromJson(needs.setup-matrix.outputs.fontFamilies) }}
-
     steps:
-      # Setup dependencies
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
-
       - name: Install ttfautohint
-        shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ttfautohint
-
-      # Checkout this repository to access custom build plans
-      - name: Checkout Customization Repository
+      - name: Checkout customization repo
         uses: actions/checkout@v5
         with:
           path: customization
-
-      # Checkout repository into `iosevka` sub directory
-      - name: Checkout Iosevka Repository
+      - name: Checkout Iosevka repo
         uses: actions/checkout@v5
         with:
-          repository: be5invis/iosevka # You can change this to your own fork
+          repository: be5invis/iosevka
           path: iosevka
-      
-      # Copy custom build plans into Iosevka build directory
-      - name: Copy Custom Build Plans
-        shell: bash
-        run: |
-          cp customization/private-build-plans.toml iosevka/private-build-plans.toml
-
-      # Build the font
-      - name: Build Font ${{ matrix.fontFamily }}
-        shell: bash
+      - name: Copy build plans
+        run: cp customization/private-build-plans.toml iosevka/private-build-plans.toml
+      - name: Build font
         working-directory: iosevka
         run: |
           npm install
           npm run build -- ttf::${{ matrix.fontFamily }}
-
-      # Upload build artifacts
-      - name: Upload Font Artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.fontFamily }}-ttf
           path: iosevka/dist/${{ matrix.fontFamily }}/TTF/
+
+  commit:
+    name: Commit fonts to repo
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout customization repo
+        uses: actions/checkout@v5
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: false
+      - name: Reorganize artifacts into dist/
+        run: |
+          for artifact_dir in dist/*-ttf; do
+            family=$(basename "$artifact_dir" -ttf)
+            mkdir -p dist/$family/TTF
+            mv "$artifact_dir"/* dist/$family/TTF/
+            rmdir "$artifact_dir"
+          done
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add dist
+          if ! git diff --cached --quiet; then
+            git commit -m "Update built Iosevka fonts [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
