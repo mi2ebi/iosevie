@@ -1,6 +1,6 @@
 [buildPlans.Iosevie]
 family = "iosevie"
-spacing = "fixed"
+spacing = "normal"
 serifs = "sans"
 noCvSs = true
 exportGlyphNames = false
@@ -51,7 +51,6 @@ micro-sign = "tailed-serifless"
 [buildPlans.Iosevie.variants.italic]
 a = "single-storey-earless-corner-tailed"
 d = "toothed-serifless"
-e = "flat-crossbar"
 f = "flat-hook-diagonal-tailed-crossbar-at-x-height"
 g = "single-storey-earless-corner"
 i = "serifed-diagonal-tailed"
@@ -98,3 +97,19 @@ angle = 9.4
 shape = "italic"
 menu = "italic"
 css = "italic"
+
+[buildPlans.Iosevie.ligations]
+enables = [
+  "arrow-hyphen",
+  "arrow-equal",
+  "arrow-wave",
+  "eqeq",
+  "gteq",
+  "kern-bars",
+  "kern-dotty",
+  "llgg",
+  "lteq",
+  "minus-minus",
+  "plus-plus",
+  "underscore-underscore"
+]
