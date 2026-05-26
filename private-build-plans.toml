@@ -102,7 +102,6 @@ css = "italic"
 enables = [
   "arrow-hyphen",
   "arrow-equal",
-  "arrow-wave",
   "eqeq",
   "gteq",
   "kern-bars",
@@ -111,6 +110,5 @@ enables = [
   "lteq",
   "minus-minus",
   "plus-plus",
-  "tilde-tilde",
   "underscore-underscore"
 ]
