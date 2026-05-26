@@ -1,6 +1,6 @@
 [buildPlans.Iosevie]
 family = "iosevie"
-spacing = "normal"
+spacing = "term"
 serifs = "sans"
 noCvSs = true
 exportGlyphNames = false
@@ -111,5 +111,6 @@ enables = [
   "lteq",
   "minus-minus",
   "plus-plus",
+  "tilde-tilde",
   "underscore-underscore"
 ]
