@@ -4,6 +4,7 @@ spacing = "term"
 serifs = "sans"
 noCvSs = true
 exportGlyphNames = false
+noLigation = true
 
 [buildPlans.Iosevie.variants.design]
 one = "base"
@@ -97,18 +98,3 @@ angle = 9.4
 shape = "italic"
 menu = "italic"
 css = "italic"
-
-[buildPlans.Iosevie.ligations]
-enables = [
-  "arrow-hyphen",
-  "arrow-equal",
-  "eqeq",
-  "gteq",
-  "kern-bars",
-  "kern-dotty",
-  "llgg",
-  "lteq",
-  "minus-minus",
-  "plus-plus",
-  "underscore-underscore"
-]
